@@ -1,0 +1,37 @@
+2018-06-12 Ingmars Melkis <contact@zingmars.me>
+
+  * Open sourced the plugin with CEO's permission.
+
+2017-05-18 Ingmars Melkis <zingmars@playgineering.com>
+
+  * Added a FPS counter plugin.
+  * Implemented all of the output types our cameras support.
+  * Implemented continuous grabbing support.
+  * Added colour transformation configuration.
+  * Added AutoExposure upper and lower limits.
+  * Added a configuration option for automatic brightness.
+  * Added resolution offsets.
+  * Added support for PGI.
+  * Added support for image flipping.
+  * Implemented multiple camera support.
+  * Added more debug output.
+  * Added configure checks for pylon.
+  * Fixed Acquisition method not setting FrameTriggerWait properly.
+  * Changed limitbandwidth to a true/false option.
+  * Implemented PylonC error macro to output line numbers where the error occurred.
+  * Added orc_memcpy support.
+  * Fixed camera reset code.
+  * Removed support for chunk mode.
+  * Updated documentation.
+
+2017-02-17 Ingmars Melkis <zingmars@playgineering.com>
+
+  * Release.
+
+2016-08-26 Ingmars Melkis <zingmars@playgineering.com>
+
+  * Created a simple image grabber plugin.
+
+Copyright 2016-2018 Playgineering Ltd.
+Copying and distribution of this file, with or without modification, are
+permitted provided the copyright notice and this notice are preserved.
