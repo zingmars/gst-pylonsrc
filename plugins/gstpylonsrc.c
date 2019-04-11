@@ -177,7 +177,7 @@ gst_pylonsrc_class_init (GstPylonsrcClass * klass)
       &gst_pylonsrc_src_template);
 
   gst_element_class_set_static_metadata (GST_ELEMENT_CLASS(klass),
-      "Basler's Python5 for Gstreamer", "Source/Video/Device", "Uses pylon5 to get video from Basler's USB3 Vision cameras for use with Gstreamer",
+      "Basler's Pylon5 for Gstreamer", "Source/Video/Device", "Uses pylon5 to get video from Basler's USB3 Vision cameras for use with Gstreamer",
       "Ingmars Melkis <zingmars@playgineering.com>");
 
   gobject_class->set_property = gst_pylonsrc_set_property;
