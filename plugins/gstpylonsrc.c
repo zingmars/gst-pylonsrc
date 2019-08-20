@@ -879,13 +879,13 @@ gst_pylonsrc_get_caps (GstBaseSrc * src, GstCaps * filter)
     
     if(strncmp("bayer", pylonsrc->imageFormat, 5) == 0) {
       type = "video/x-bayer\0";
-      format = "bggr\0";
+      format = "rggb\0";
       if(pylonsrc->flipx && !pylonsrc->flipy) {
-        format = "gbrg\0";
-      } else if (!pylonsrc->flipx && pylonsrc->flipy) {
         format = "grbg\0";
+      } else if (!pylonsrc->flipx && pylonsrc->flipy) {
+        format = "gbrg\0";
       } else if (pylonsrc->flipx && pylonsrc->flipy){
-        format = "rggb\0";
+        format = "bggr\0";
       }
     } else {
       type = "video/x-raw\0";
@@ -1166,13 +1166,13 @@ gst_pylonsrc_start (GstBaseSrc * src)
     g_autoptr(GString) filter = g_string_new(NULL);
     
     if(!pylonsrc->flipx && !pylonsrc->flipy) {
-      g_string_printf(filter, "BG");
-    } else if(pylonsrc->flipx && !pylonsrc->flipy) {
-      g_string_printf(filter, "GB");
-    } else if(!pylonsrc->flipx && pylonsrc->flipy) {
-      g_string_printf(filter, "GR");
-    } else {
       g_string_printf(filter, "RG");
+    } else if(pylonsrc->flipx && !pylonsrc->flipy) {
+      g_string_printf(filter, "GR");
+    } else if(!pylonsrc->flipx && pylonsrc->flipy) {
+      g_string_printf(filter, "GB");
+    } else {
+      g_string_printf(filter, "BG");
     }
     g_string_printf(pixelFormat, "Bayer%s%s", filter->str, &pylonsrc->imageFormat[5]);
     g_string_printf(format, "EnumEntry_PixelFormat_%s", pixelFormat->str);
