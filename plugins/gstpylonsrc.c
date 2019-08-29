@@ -93,6 +93,8 @@ enum
   PROP_CAMERA,
   PROP_HEIGHT,
   PROP_WIDTH,
+  PROP_BINNINGH,
+  PROP_BINNINGV,
   PROP_LIMITBANDWIDTH,
   PROP_MAXBANDWIDTH,
   PROP_SENSORREADOUTMODE,
@@ -203,6 +205,14 @@ gst_pylonsrc_class_init (GstPylonsrcClass * klass)
   g_object_class_install_property (gobject_class, PROP_WIDTH,
       g_param_spec_int ("width", "width", "(Pixels) The width of the picture. Note that the camera will remember this setting, and will use values from the previous runs if you relaunch without specifying this parameter. Reconnect the camera or use the reset parameter to reset.", 0,
           10000, 0,
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+  g_object_class_install_property (gobject_class, PROP_BINNINGH,
+      g_param_spec_int ("binningh", "Horizontal binning", "(Pixels) The number of pixels to be binned in horizontal direction. Note that the camera will remember this setting, and will use values from the previous runs if you relaunch without specifying this parameter. Reconnect the camera or use the reset parameter to reset.", 1,
+          6, 1,
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+  g_object_class_install_property (gobject_class, PROP_BINNINGV,
+      g_param_spec_int ("binningv", "Vertical binning", "(Pixels) The number of pixels to be binned in vertical direction. Note that the camera will remember this setting, and will use values from the previous runs if you relaunch without specifying this parameter. Reconnect the camera or use the reset parameter to reset.", 1,
+          6, 1,
           (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
   g_object_class_install_property (gobject_class, PROP_LIMITBANDWIDTH,
       g_param_spec_boolean ("limitbandwidth", "Link Throughput limit mode", "(true/false) Bandwidth limit mode. Disabling this will potentially allow the camera to reach higher frames per second, but can potentially damage your camera. Use with caution. Running the plugin without specifying this parameter will reset the value stored on the camera to `true`.", TRUE,
@@ -401,6 +411,8 @@ gst_pylonsrc_init (GstPylonsrc *pylonsrc)
   pylonsrc->limitBandwidth = TRUE;
   pylonsrc->setFPS = FALSE;
   pylonsrc->demosaicing = FALSE;
+  pylonsrc->binningh = 1;
+  pylonsrc->binningv = 1;
   pylonsrc->centerx = FALSE;
   pylonsrc->centery = FALSE;
   pylonsrc->flipx = FALSE;
@@ -485,6 +497,12 @@ gst_pylonsrc_set_property (GObject * object, guint property_id,
       break;
     case PROP_WIDTH:
       pylonsrc->width = g_value_get_int(value);
+      break;
+    case PROP_BINNINGH:
+      pylonsrc->binningh = g_value_get_int(value);
+      break;
+    case PROP_BINNINGV:
+      pylonsrc->binningv = g_value_get_int(value);
       break;
     case PROP_OFFSETX:
       pylonsrc->offsetx = g_value_get_int(value);
@@ -683,6 +701,12 @@ gst_pylonsrc_get_property (GObject * object, guint property_id,
       break;
     case PROP_WIDTH:
       g_value_set_int(value, pylonsrc->width);
+      break;
+    case PROP_BINNINGH:
+      g_value_set_int(value, pylonsrc->binningh);
+      break;
+    case PROP_BINNINGV:
+      g_value_set_int(value, pylonsrc->binningv);
       break;
     case PROP_OFFSETX:
       g_value_set_int(value, pylonsrc->offsetx);
@@ -1034,6 +1058,18 @@ gst_pylonsrc_start (GstBaseSrc * src)
         GST_ELEMENT_ERROR(pylonsrc, RESOURCE, FAILED, ("Failed to initialise the camera"), ("Camera couldn't be reset properly."));
         goto error;
       }
+  }
+
+  // set binning of camera
+  _Bool cameraReportsBinningHorizontal = PylonDeviceFeatureIsImplemented(pylonsrc->deviceHandle, "BinningHorizontal");
+  _Bool cameraReportsBinningVertical = PylonDeviceFeatureIsImplemented(pylonsrc->deviceHandle, "BinningVertical");
+  if(cameraReportsBinningVertical && cameraReportsBinningHorizontal) {
+    GST_DEBUG_OBJECT(pylonsrc, "Setting horizontal binning to %"PRId64, pylonsrc->binningh);
+    res = PylonDeviceSetIntegerFeature(pylonsrc->deviceHandle, "BinningHorizontal", pylonsrc->binningh);
+    PYLONC_CHECK_ERROR(pylonsrc, res);
+    GST_DEBUG_OBJECT(pylonsrc, "Setting vertical binning to %"PRId64, pylonsrc->binningv);
+    res = PylonDeviceSetIntegerFeature(pylonsrc->deviceHandle, "BinningVertical", pylonsrc->binningv);
+    PYLONC_CHECK_ERROR(pylonsrc, res);
   }
 
   // Get the camera's resolution
