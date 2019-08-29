@@ -51,7 +51,7 @@ struct _GstPylonsrc
   // Plugin parameters
   _Bool setFPS, continuousMode, limitBandwidth, demosaicing, centerx, centery, flipx, flipy;
   double fps, exposure, gain, blacklevel, gamma, balancered, balanceblue, balancegreen, redhue, redsaturation, yellowhue, yellowsaturation, greenhue, greensaturation, cyanhue, cyansaturation, bluehue, bluesaturation, magentahue, magentasaturation, sharpnessenhancement, noisereduction, autoexposureupperlimit, autoexposurelowerlimit, gainupperlimit, gainlowerlimit, brightnesstarget, transformation00, transformation01, transformation02, transformation10, transformation11, transformation12, transformation20, transformation21, transformation22;
-  int64_t height, width, maxHeight, maxWidth, maxBandwidth, testImage, offsetx, offsety;
+  int64_t height, width, binningh, binningv, maxHeight, maxWidth, maxBandwidth, testImage, offsetx, offsety;
   gchar *imageFormat, *sensorMode, *lightsource, *autoexposure, *autowhitebalance, *autogain, *reset, *autoprofile, *transformationselector, *userid;
 };
 
