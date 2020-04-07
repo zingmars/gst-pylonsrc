@@ -1,4 +1,12 @@
-# gst-pylonsrc
+gst-pylonsrc
+===
+
+## Repository deprecation note
+
+This plugin has been merged in https://github.com/joshdoe/gst-plugins-vision, where it will be updated and maintained by a new maintainer. The maintained version includes support for more parameters, compatibility with Microsoft Windows, and some internal fixes. This version is still functional, and can be used if for some reason you dislike CMake, and/or need to run the plugin only on Linux. If you find a problem with the version in this repository please try the version in the gst-plugins-vision repository first, and raise any issues in that repository if the issue is still present.
+
+Original description
+===
 
 This is a gstreamer element that allows using Basler's USB3 Vision cameras using gstreamer.
 
